@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Health Diagnosis</title>
+    <style>
+        /* Your CSS styles go here */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #potentialDiagnoses,
+        #finalDiagnosis {
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .diagnosis-details {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Health Diagnosis</h1>
+    
+    <label for="symptoms">Enter Symptoms (comma-separated):</label>
+    <input type="text" id="symptoms" required>
+    <button type="button" onclick="getPotentialDiagnoses()">Submit Symptoms</button>
+
+    <div id="potentialDiagnoses"></div>
+
+    <label for="analysis">Enter Analysis Results (comma-separated):</label>
+    <input type="text" id="analysis" required>
+    <button type="button" onclick="getFinalDiagnosis()">Submit Analysis</button>
+
+    <div id="finalDiagnosis"></div>
+
+    <!-- Button to return to the main page -->
+    <button type="button" onclick="goToMainPage()">Return to Main Page</button>
+
+    <script>
+        // Sample data (replace with your actual data)
+        const diseasesData = {
+            "ГЭРБ": {
+                symptoms: ["изжога", "регургитация", "боль за грудиной", "усиление симптоматики лежа на спине", "дисфагия"],
+                analyses: ["Эндоскопия с биопсией"]
+            },
+            "СРК": {
+                symptoms: ["боль в животе", "запор", "диарея", "метеоризм"],
+                analyses: ["Pulmonary function tests may show airflow obstruction."]
+            },
+            "Болезнь Крона": {
+                symptoms: ["слабость", "субфебрилитет", "боль в животе", "диарея"],
+                analyses: ["Blood pressure monitoring may indicate hypertension."]
+            },
+            "Язвенная болезнь": {
+                symptoms: ["боль в животе"],
+                analyses: ["Эндоскопия с биопсией", "Уреазный тест", "Дыхательный тест"]
+            }
+        };
+
+        function getPotentialDiagnoses() {
+            const enteredSymptoms = document.getElementById('symptoms').value.split(',').map(symptom => symptom.trim().toLowerCase());
+
+            const potentialDiagnoses = analyzeSymptoms(enteredSymptoms);
+            displayResults('potentialDiagnoses', 'Возможные диагнозы:', potentialDiagnoses);
+        }
+
+        function getFinalDiagnosis() {
+            const enteredAnalysis = document.getElementById('analysis').value.split(',').map(analysis => analysis.trim().toLowerCase());
+
+            const finalDiagnosis = analyzeAnalysis(enteredAnalysis);
+            displayResults('finalDiagnosis', 'Заключительный диагноз:', finalDiagnosis);
+        }
+
+        function analyzeSymptoms(symptoms) {
+            const potentialDiagnoses = [];
+
+            for (const disease in diseasesData) {
+                const diseaseSymptoms = diseasesData[disease].symptoms.map(symptom => symptom.toLowerCase());
+                if (symptoms.some(symptom => diseaseSymptoms.includes(symptom))) {
+                    potentialDiagnoses.push(disease);
+                }
+            }
+
+            return potentialDiagnoses;
+        }
+
+        function analyzeAnalysis(analysisList) {
+            const finalDiagnosis = [];
+
+            for (const disease in diseasesData) {
+                const diseaseAnalysisList = diseasesData[disease].analyses.map(analysis => analysis.toLowerCase());
+                
+                // Check if at least one entered analysis is in the list for the current disease
+                if (analysisList.some(analysis => diseaseAnalysisList.includes(analysis))) {
+                    finalDiagnosis.push(disease);
+                }
+            }
+
+            return finalDiagnosis;
+        }
+
+        function displayResults(elementId, title, results) {
+            const resultContainer = document.getElementById(elementId);
+            resultContainer.innerHTML = `<h2>${title}</h2>`;
+            
+            if (results.length > 0) {
+                const resultList = document.createElement('ul');
+                results.forEach(diagnosis => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = diagnosis;
+                    resultList.appendChild(listItem);
+                });
+                resultContainer.appendChild(resultList);
+            } else {
+                resultContainer.innerHTML += '<p>Результаты не найдены.</p>';
+            }
+        }
+
+        // Function to redirect to the main page (index.html)
+        function goToMainPage() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

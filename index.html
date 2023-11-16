@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Analysis</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        input {
+            width: 300px;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Health Analysis</h1>
+    
+    <label for="specialty">Введите специальность (Гастроэнтерология, Пульмонология, Кардиология):</label>
+    <input type="text" id="specialty" name="specialty" required>
+    <button type="button" onclick="redirectToSpecialty()" form="healthForm">Submit</button>
+
+    <script>
+        function redirectToSpecialty() {
+            const enteredSpecialty = document.getElementById('specialty').value.trim().toLowerCase();
+
+            switch (enteredSpecialty) {
+                case 'гастроэнтерология':
+                    window.location.href = 'gastroenterology.html';
+                    break;
+                case 'пульмонология':
+                    window.location.href = 'pulmonology.html';
+                    break;
+                case 'кардиология':
+                    window.location.href = 'cardiology.html';
+                    break;
+                case 'вся медицина':
+                    window.location.href = 'fullmed.html';
+                    break;
+                default:
+                    alert('Неправильная специализация. Пожалуйста, введите Гастроэнтерология, Пульмонология или Кардиология.');
+            }
+        }
+
+        // Clear the onbeforeunload event handler to suppress the confirmation dialog
+        window.onbeforeunload = null;
+        
+    </script>
+</body>
+</html>
